@@ -9,6 +9,8 @@ public class DaoFactory {
 	private String username;
 	private String password;
 
+	public static DaoFactory dao = null;
+
 	DaoFactory(String url, String username, String password) {
 		this.url = url;
 		this.username = username;
@@ -21,9 +23,11 @@ public class DaoFactory {
 		} catch (ClassNotFoundException e) {
 
 		}
+		if (dao == null) {
+			dao = new DaoFactory("jdbc:mysql://localhost:8889/sr03", "root", "root");
+		}
 
-		DaoFactory instance = new DaoFactory("jdbc:mysql://localhost:8889/sr03", "root", "root");
-		return instance;
+		return dao;
 	}
 
 	public Connection getConnection() throws SQLException {
@@ -31,6 +35,7 @@ public class DaoFactory {
 		connexion.setAutoCommit(false);
 		return connexion;
 	}
+
 	// Récupération du Dao
 	public DaoInterface getMySqlImpl() {
 		return new MySqlImpl(this);
